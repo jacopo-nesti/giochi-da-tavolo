@@ -5,7 +5,8 @@ const router = express.Router()
 const {
     getAllGames,
     getGameById,
-    createGame
+    createGame,
+    updateExistingGame
 } = require('../controllers/gamesController')
 
 // GET - Tutti i giochi
@@ -16,5 +17,8 @@ router.get('/:id', getGameById)
 
 // POST - Creazione nuovo gioco
 router.post('/', createGame)
+
+// PUT - Aggiornamento di un gioco esistente
+router.put('/:id', updateExistingGame)
 
 module.exports = router
