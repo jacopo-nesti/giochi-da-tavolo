@@ -155,7 +155,7 @@ async function updateExistingGame(req, res) {
         // Validazione ID
         if (!Number.isInteger(Number(id)) || Number(id) < 1) {
             return res.status(400).json(
-                new ApiResponseDTO(false, "L'id della categoria deve essere un numero intero positivo", 400)
+                new ApiResponseDTO(false, "L'id del gioco deve essere un numero intero positivo", 400)
             )
         }
 
