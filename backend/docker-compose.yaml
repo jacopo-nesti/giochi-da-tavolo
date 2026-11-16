@@ -1,0 +1,19 @@
+services:
+  db:
+    image: mysql:9.3.0
+    container_name: giochi_da_tavolo_mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=123
+      - MYSQL_DATABASE=giochi_da_tavolo
+    ports:
+      - 3307:3306
+    volumes:
+      - ./db-data:/var/lib/mysql
+
+  pma:
+    image: phpmyadmin:latest
+    container_name: giochi_da_tavolo_pma
+    ports:
+      - 8081:80
+    environment:
+      - PMA_ARBITRARY=1
