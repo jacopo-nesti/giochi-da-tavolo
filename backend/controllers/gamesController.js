@@ -242,10 +242,55 @@ async function updateExistingGame(req, res) {
     }
 }
 
+// DELETE - Eliminazione di un gioco esistente
+async function deleteExistingGame(req, res) {
+    try {
+        // Recupero ID dall'URL
+        const id = req.params.id
+
+        // Validazione ID
+        if (!Number.isInteger(Number(id)) || Number(id) <1) {
+            return res.status(400).json(
+                new ApiResponseDTO(false, "L'id del gioco deve essere un numero intero positivo", 400)
+            )
+        }
+
+        // Hard delete del gioco nel database
+        const [deleteGame] = await pool.query(
+            `
+            DELETE FROM games
+            WHERE id = ?
+            LIMIT 1
+            `,
+            [id]
+        )
+
+        // Verifica esistenza del gioco
+        if (deleteGame.affectedRows === 0) {
+            return res.status(404).json(
+                new ApiResponseDTO(false, "Il gioco selezionato non esiste", 404)
+            )
+        }
+
+        // Risposta positiva
+        return res.status(200).json(
+            new ApiResponseDTO(true, "Gioco eliminato con successo", 200)
+        )
+
+    } catch (err) {
+        console.error(err)
+
+        return res.status(500).json(
+            new ApiResponseDTO(false, "Errore durante l'eliminazione del gioco", 500)
+        )
+    }
+}
+
 // Esportazione delle funzioni
 module.exports = {
     getAllGames,
     getGameById,
     createGame,
-    updateExistingGame
+    updateExistingGame,
+    deleteExistingGame
 }

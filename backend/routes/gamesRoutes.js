@@ -6,7 +6,8 @@ const {
     getAllGames,
     getGameById,
     createGame,
-    updateExistingGame
+    updateExistingGame,
+    deleteExistingGame
 } = require('../controllers/gamesController')
 
 // GET - Tutti i giochi
@@ -20,5 +21,8 @@ router.post('/', createGame)
 
 // PUT - Aggiornamento di un gioco esistente
 router.put('/:id', updateExistingGame)
+
+// HARD DELETE - Eliminazione di un gioco
+router.delete('/:id', deleteExistingGame)
 
 module.exports = router
