@@ -9,6 +9,13 @@ const categoriesRoutes = require('./routes/categoriesRoutes')
 // Middleware
 app.use(express.json())
 
+// Cors frontend
+const cors = require("cors")
+
+app.use(cors({
+    origin: "http://localhost:5173"
+}))
+
 // Rotta principale
 app.get('/', (req, res) => {
     res.send('Giochi da Tavolo')
