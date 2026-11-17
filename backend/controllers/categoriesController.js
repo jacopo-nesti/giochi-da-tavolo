@@ -194,10 +194,61 @@ async function updateExistingCategory(req, res) {
 }
 
 // DELETE - Eliminazione di una categoria esistente
+async function deleteExistingCategory(req, res) {
+    try {
+        // Recupero ID dall'URL
+        const id = req.params.id
+
+        // Validazione ID
+        if (!Number.isInteger(Number(id)) || Number(id) < 1) {
+            return res.status(400).json(
+                new ApiResponseDTO(false, "L'id deve essere un numero intero positivo", 400)
+            )
+        }
+
+        // Hard delete della categoria
+        const [deleteCategory] = await pool.query(
+            `
+            DELETE FROM categories
+            WHERE id = ?
+            LIMIT 1
+            `,
+            [id]
+        )
+
+        // Verifica esistenza della categoria
+        if (deleteCategory.affectedRows === 0) {
+            return res.status(404).json(
+                new ApiResponseDTO(false, "La categoria selezionata non esiste", 404)
+            )
+        }
+        
+        // Risposta positiva
+        return res.status(200).json(
+            new ApiResponseDTO(true, "Categoria eliminata con successo", 200)
+        )
+
+    }
+    catch (err) {
+        console.error(err)
+
+        // Categoria associata a uno o più giochi
+        if (err.code === "ER_ROW_IS_REFERENCED_2") {
+            return res.status(400).json(
+                new ApiResponseDTO(false, "Impossibile eliminare la categoria: contiene giochi associati", 409)
+            )
+        }
+
+        return res.status(500).json(
+            new ApiResponseDTO(false, "Errore durante l'eliminazione della categoria", 500)
+        )
+    }
+}
 
 // Esportazione delle funzioni
 module.exports = {
     getAllCategories,
     createCategory,
-    updateExistingCategory
+    updateExistingCategory,
+    deleteExistingCategory
 }

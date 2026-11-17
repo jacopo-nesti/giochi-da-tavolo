@@ -4,7 +4,8 @@ const router = express.Router()
 const {
     getAllCategories,
     createCategory,
-    updateExistingCategory
+    updateExistingCategory,
+    deleteExistingCategory
 } = require('../controllers/categoriesController')
 
 // GET - Tutte le categorie
@@ -17,5 +18,6 @@ router.post('/', createCategory)
 router.put('/:id', updateExistingCategory)
 
 // HARD DELETE - Eliminazione di una categoria
+router.delete('/:id', deleteExistingCategory)
 
 module.exports = router
